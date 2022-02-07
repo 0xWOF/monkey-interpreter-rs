@@ -1,22 +1,33 @@
-#[derive(Debug, PartialEq)]
+#[derive(PartialEq, Debug)]
 pub enum Token<'a> {
     Illegal,
     EOF,
 
     Identifier { string: &'a str },
-    Integer,
+    Integer { string: &'a str },
 
     Assign,
     Plus,
-
+    Minus,
+    Exclamation,
+    Asterisk,
+    Slash,
+    LessThan,
+    GreaterThan,
     Comma,
     Semicolon,
-
     LeftParenthesis,
     RightParenthesis,
     LeftBracket,
     RightBracket,
+    Equal,
+    NotEqual,
 
     Function,
     Let,
+    True,
+    False,
+    If,
+    Else,
+    Return,
 }
