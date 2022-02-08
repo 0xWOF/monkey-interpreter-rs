@@ -8,7 +8,7 @@ fn test_next_token() {
         let ten = 10;
 
         let add = fn(x, y) {
-        x + y;
+            x + y;
         };
 
         let result = add(five, ten);
@@ -92,12 +92,10 @@ fn test_next_token() {
         Token::RightBracket,
         Token::Integer { string: "10" },
         Token::Equal,
-        Token::Assign,
         Token::Integer { string: "10" },
         Token::Semicolon,
         Token::Integer { string: "10" },
         Token::NotEqual,
-        Token::Assign,
         Token::Integer { string: "9" },
         Token::Semicolon,
     ];

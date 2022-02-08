@@ -15,13 +15,13 @@ impl<'a> Lexer<'a> {
     pub fn next(&mut self) -> Token {
         match self.read() {
             '=' => match self.peek() {
-                '=' => Token::Equal,
+                '=' => { self.read(); Token::Equal },
                 _ => Token::Assign,
             },
             '+' => Token::Plus,
             '-' => Token::Minus,
             '!' => match self.peek() {
-                '=' => Token::NotEqual,
+                '=' => { self.read(); Token::NotEqual },
                 _ => Token::Exclamation,
             },
             '*' => Token::Asterisk,
