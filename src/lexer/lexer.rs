@@ -12,7 +12,7 @@ impl<'a> Lexer<'a> {
         Lexer { input, cursor: 0 }
     }
 
-    pub fn next(&mut self) -> Token {
+    pub fn next(&mut self) -> Token<'a> {
         match self.read() {
             '=' => match self.peek() {
                 '=' => { self.read(); Token::Equal },
@@ -42,7 +42,7 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    fn next_identifier(&mut self) -> Token {
+    fn next_identifier(&mut self) -> Token<'a> {
         let identifier = self.read_identifier();
 
         match identifier {
@@ -58,26 +58,19 @@ impl<'a> Lexer<'a> {
         }
     }
 
-    fn next_digit(&mut self) -> Token {
+    fn next_digit(&mut self) -> Token<'a> {
         Token::Integer { string: self.read_digit() }
     }
 
-    fn peek(&mut self) -> char {
-        let letter =
-            self.input
-            .chars()
-            .nth(self.cursor)
-            .unwrap_or('\0');
-
-        return letter;
+    fn peek(&self) -> char {
+        self.input
+        .chars()
+        .nth(self.cursor)
+        .unwrap_or('\0')
     }
 
     fn read(&mut self) -> char {
-        let letter =
-            self.input
-            .chars()
-            .nth(self.cursor)
-            .unwrap_or('\0');
+        let letter = self.peek();
         self.cursor += 1;
 
         return letter;
@@ -87,7 +80,7 @@ impl<'a> Lexer<'a> {
         self.cursor -= 1;
     }
 
-    fn read_identifier(&mut self) -> &str {
+    fn read_identifier(&mut self) -> &'a str {
         let start = self.cursor - 1;
         while is_letter(self.read()) {}
         let end = self.cursor - 1;
@@ -97,7 +90,7 @@ impl<'a> Lexer<'a> {
         &self.input[start..end]
     }
 
-    fn read_digit(&mut self) -> &str {
+    fn read_digit(&mut self) -> &'a str {
         let start = self.cursor - 1;
         while is_digit(self.read()) {}
         let end = self.cursor - 1;
