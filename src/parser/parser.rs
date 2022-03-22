@@ -1,9 +1,9 @@
-use crate::{lexer::Lexer, token::Token, ast::{program::Program, statement::{Statement, r#let::Let}, expression::{identifier::Identifier, Expression}}};
+use crate::{lexer::Lexer, token::Token, ast::program::Program};
 
 pub struct Parser<'a> {
-    lexer: Lexer<'a>,
-    cursor: Token<'a>,
-    peek: Token<'a>,
+    pub(super) lexer: Lexer<'a>,
+    pub(super) cursor: Token<'a>,
+    pub(super) peek: Token<'a>,
 }
 
 impl<'a> Parser<'a> {
@@ -31,27 +31,10 @@ impl<'a> Parser<'a> {
         program
     }
 
-    fn parseStatement(&self) -> Statement<'a> {
-        match self.cursor {
-            Token::Let => Statement::Let(self.parseLetStatement()),
-            _ => unreachable!(),
-        }
-    }
-
-    fn parseLetStatement(&self) -> Let<'a> {
-        panic!("not implemented")
-    }
-
-    fn parseIdentifier(&self) -> Identifier<'a> {
-        panic!("not implemented")
-    }
-
-    fn parseExpression(&self) -> Expression<'a> {
-        panic!("not implemented")
-    }
-
-    fn read(&mut self) {
+    pub(super) fn read(&mut self) -> Token<'a> {
         self.cursor = self.peek;
         self.peek = self.lexer.next();
+
+        self.cursor
     }
 }

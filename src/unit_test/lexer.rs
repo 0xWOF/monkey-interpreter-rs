@@ -1,5 +1,5 @@
-use monkey_interpreter_rs::token::*;
-use monkey_interpreter_rs::lexer::*;
+use crate::token::*;
+use crate::lexer::*;
 
 #[test]
 fn test_next_token() {

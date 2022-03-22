@@ -1,6 +1,6 @@
 use crate::token::Token;
 
-use super::utility::{is_letter, is_digit, is_space};
+use crate::utility::check::{is_letter, is_digit, is_space};
 
 pub struct Lexer<'a> {
     input: &'a str,

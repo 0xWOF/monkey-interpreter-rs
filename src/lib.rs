@@ -1,4 +1,5 @@
-pub mod ast;
-pub mod token;
-pub mod lexer;
-pub mod parser;
+pub(crate) mod ast;
+pub(crate) mod token;
+pub(crate) mod lexer;
+pub(crate) mod parser;
+pub(crate) mod utility;

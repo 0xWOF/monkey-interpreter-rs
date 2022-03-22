@@ -1,3 +1,3 @@
 pub struct Identifier<'a> {
-    pub value: &'a str,
+    pub name: &'a str,
 }
