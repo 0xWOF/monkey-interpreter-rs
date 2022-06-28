@@ -15,13 +15,13 @@ impl<'a> Lexer<'a> {
     pub fn next(&mut self) -> Token<'a> {
         match self.read() {
             '=' => match self.peek() {
-                '=' => { self.read(); Token::Equal },
+                '=' => { self.forward(); Token::Equal },
                 _ => Token::Assign,
             },
             '+' => Token::Plus,
             '-' => Token::Minus,
             '!' => match self.peek() {
-                '=' => { self.read(); Token::NotEqual },
+                '=' => { self.forward(); Token::NotEqual },
                 _ => Token::Exclamation,
             },
             '*' => Token::Asterisk,
@@ -54,12 +54,30 @@ impl<'a> Lexer<'a> {
             "else" => Token::Else,
             "return" => Token::Return,
             "" => Token::Illegal,
-            _ => Token::Identifier { string: identifier },
+            _ => Token::Identifier { name: identifier },
         }
     }
 
     fn next_digit(&mut self) -> Token<'a> {
-        Token::Integer { string: self.read_digit() }
+        Token::Integer { value: self.read_digit() }
+    }
+
+    fn read_identifier(&mut self) -> &'a str {
+        let start = self.cursor - 1;
+        while is_letter(self.peek()) { self.forward(); }
+        let end = self.cursor;
+
+        &self.input[start..end]
+    }
+
+    fn read_digit(&mut self) -> u64 {
+        let start = self.cursor - 1;
+        while is_digit(self.peek()) { self.forward(); }
+        let end = self.cursor;
+
+        (&self.input[start..end])
+        .parse::<u64>()
+        .unwrap()
     }
 
     fn peek(&self) -> char {
@@ -71,32 +89,12 @@ impl<'a> Lexer<'a> {
 
     fn read(&mut self) -> char {
         let letter = self.peek();
-        self.cursor += 1;
+        self.forward();
 
         return letter;
     }
 
-    fn back(&mut self) {
-        self.cursor -= 1;
-    }
-
-    fn read_identifier(&mut self) -> &'a str {
-        let start = self.cursor - 1;
-        while is_letter(self.read()) {}
-        let end = self.cursor - 1;
-
-        self.back();
-
-        &self.input[start..end]
-    }
-
-    fn read_digit(&mut self) -> &'a str {
-        let start = self.cursor - 1;
-        while is_digit(self.read()) {}
-        let end = self.cursor - 1;
-
-        self.back();
-
-        &self.input[start..end]
+    fn forward(&mut self) {
+        self.cursor += 1;
     }
 }

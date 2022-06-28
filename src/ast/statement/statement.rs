@@ -1,8 +1,16 @@
-use crate::ast::node::Node;
-
-use super::{r#let::Let, expression::Expression};
+use crate::ast::{node::Node, expression::{identifier::Identifier, Expression}};
 
 pub enum Statement<'a> {
-    Let(Let<'a>),
-    Expression(Expression<'a>),
+    Let {
+        name: Identifier<'a>,
+        expression: Box<Expression<'a>>,
+    },
+    Expression {
+        expression: Box<Expression<'a>>,
+    },
+    Return {
+        expression: Box<Expression<'a>>,
+    },
 }
+
+impl<'a> Node for Statement<'a> {}

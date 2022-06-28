@@ -1,10 +1,17 @@
+use strum_macros::EnumDiscriminants;
+use enum_as_inner::EnumAsInner;
+
 #[derive(PartialEq, Debug, Clone, Copy)]
+#[derive(EnumDiscriminants)]
+#[derive(EnumAsInner)]
+#[strum_discriminants(vis(pub))]
+#[strum_discriminants(name(TokenDiscriminant))]
 pub enum Token<'a> {
     Illegal,
     EOF,
 
-    Identifier { string: &'a str },
-    Integer { string: &'a str },
+    Identifier(&'a str),
+    Integer(u64),
 
     Assign,
     Plus,

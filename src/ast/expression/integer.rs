@@ -1,3 +1,3 @@
 pub struct Integer {
-    pub value: i64,
+    pub value: u64,
 }

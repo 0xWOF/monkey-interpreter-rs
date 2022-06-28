@@ -1,15 +1,15 @@
-use crate::{ast::expression::{identifier::Identifier, Expression, prefix::{Prefix, Operator}, integer::Integer}, token::{Token, self}};
+use crate::{ast::expression::{identifier::Identifier, Expression, prefix::{Prefix, Operator}, integer::Integer}, token::Token};
 
 use super::Parser;
 
 impl<'a> Parser<'a> {
     pub(super) fn parse_expression(&mut self) -> Option<Expression<'a>> {
         let expression = match self.read() {
-            Token::Identifier { string } => {
-                Expression::Identifier(self.parse_identifier(string))
+            Token::Identifier(name) => {
+                Expression::Identifier(self.parse_identifier(name))
             },
-            Token::Integer { string } => {
-                Expression::Integer(self.parse_integer(string)?)
+            Token::Integer(value) => {
+                Expression::Integer(self.parse_integer(value))
             }
             // replace with `token if let Some(operator) = Operator::from(token)`
             // after `if let match guard` is stablized (rfc #2294)
@@ -22,20 +22,21 @@ impl<'a> Parser<'a> {
         Some(expression)
     }
 
-    fn parse_identifier(&self, string: &'a str) -> Identifier<'a> {
-        Identifier { name: string }
+    fn parse_identifier(&self, name: &'a str) -> Identifier<'a> {
+        Identifier { name }
     }
 
-    fn parse_integer(&self, string: &'a str) -> Option<Integer> {
-        let value = string.parse::<i64>().ok()?;
-
-        Some(Integer { value })
+    fn parse_integer(&self, value: u64) -> Integer {
+        Integer { value }
     }
     
     fn parse_prefix(&mut self, operator: Operator) -> Option<Prefix<'a>> {
         Some(Prefix {
             operator,
             expression: Box::new(self.parse_expression()?),
+        }).or_else(|| {
+            self.report_parse_error();
+            None
         })
     }
 }

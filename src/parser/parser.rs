@@ -2,19 +2,24 @@ use crate::{lexer::Lexer, token::Token, ast::program::Program};
 
 pub struct Parser<'a> {
     pub(super) lexer: Lexer<'a>,
+
     pub(super) cursor: Token<'a>,
     pub(super) peek: Token<'a>,
+
+    pub(super) errors: Vec<&'a str>,
 }
 
 impl<'a> Parser<'a> {
     pub fn new(mut lexer: Lexer<'a>) -> Parser<'a> {
         let cursor = lexer.next();
         let peek = lexer.next();
+        let errors = Vec::new();
 
         Parser {
             lexer,
             cursor,
             peek,
+            errors,
         }
     }
 
@@ -23,7 +28,7 @@ impl<'a> Parser<'a> {
 
         while self.cursor != Token::EOF {
             program.statements.push(
-                self.parseStatement()
+                self.parse_statement()
             );
             self.read();
         }
